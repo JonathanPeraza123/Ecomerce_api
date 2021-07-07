@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductCollection;
+use App\Models\Product;
 
 class BrandController extends Controller
 {
@@ -43,7 +44,11 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        return ProductCollection::make(Variation::allProducts($brand));
+        // $products = Variation::allProducts($brand)->paginate();
+        // dd($products);
+        // $products = $brand->products;
+        // return $products;
+        return ProductCollection::make(Variation::allProducts($brand)->paginate());
     }
 
     /**

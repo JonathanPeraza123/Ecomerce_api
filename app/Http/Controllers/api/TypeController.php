@@ -41,7 +41,9 @@ class TypeController extends Controller
     public function show(Category $category, Type $type)
     {
         // $products = ->paginate();
-        return ProductCollection::make(Variation::allProducts($type));
+        // $products = Variation::allProducts($type)->paginate();
+        // dd($products);
+        return ProductCollection::make(Variation::allProducts($type)->paginate());
     }
 
     /**

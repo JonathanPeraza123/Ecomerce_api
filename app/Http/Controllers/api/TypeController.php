@@ -7,6 +7,7 @@ use App\Http\Resources\ProductCollection;
 use App\Models\Category;
 use App\Models\Type;
 use App\Models\Variation;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class TypeController extends Controller
@@ -40,10 +41,9 @@ class TypeController extends Controller
      */
     public function show(Category $category, Type $type)
     {
-        // $products = ->paginate();
-        // $products = Variation::allProducts($type)->paginate();
-        // dd($products);
-        return ProductCollection::make(Variation::allProducts($type)->paginate());
+        // $variations = Variation::allProducts($type);
+        // dd($variations);
+        return ProductCollection::make(Variation::allProducts($type)->applyFilters()->paginate());
     }
 
     /**

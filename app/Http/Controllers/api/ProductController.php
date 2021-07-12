@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Variation::search(request('search'))->applySorts(request('sort'))->paginate();
+        $products = Variation::search(request('search'))->applySorts(request('sort'))->applyFilters()->paginate();
 
         return ProductCollection::make($products);
     }

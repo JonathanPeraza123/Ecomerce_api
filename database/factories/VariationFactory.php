@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use App\Models\Variation;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VariationFactory extends Factory
@@ -25,12 +26,11 @@ class VariationFactory extends Factory
         return [
             'name' => $this->faker->sentence(4),
             'slug' => $this->faker->slug,
-            'price' => 400.00,
+            'price' => $this->faker->biasedNumberBetween($min = 0, $max = 100),
             'quantity' => 10,
             'description' => $this->faker->paragraphs(3, true),
             'in_stock' => 1,
             'product_id' => Product::factory(),
-
         ];
     }
 }

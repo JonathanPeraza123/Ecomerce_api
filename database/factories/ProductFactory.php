@@ -25,9 +25,9 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'category_id' => Category::factory(),
+            // 'category_id' => Category:   :factory(),
             'brand_id' => Brand::factory(),
-            // 'type_id' =>
+            'type_id' => Type::factory(),
         ];
     }
 }

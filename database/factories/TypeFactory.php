@@ -25,6 +25,7 @@ class TypeFactory extends Factory
         return [
             'name' => $this->faker->sentence(5),
             'slug' => $this->faker->slug,
+            'category_id' => Category::factory(),
         ];
     }
 }

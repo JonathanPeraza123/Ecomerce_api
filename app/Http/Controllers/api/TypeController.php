@@ -19,7 +19,9 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        // return Collection::make(
+        //     Brand::orderBy('name')->get()
+        // );
     }
 
     /**

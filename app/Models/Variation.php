@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Swift;
 
 class Variation extends Model
 {
@@ -67,21 +68,38 @@ class Variation extends Model
 
     public function scopePrice(Builder $Query, $value)
     {
-        if ($value == 'barato') {
-            $Query->where('price', '<=', 15);
-        }
-        if ($value == 'bueno') {
-            $Query->where('price', '<=', 25);
-            $Query->where('price', '>', 15);
-        }
-
-        if ($value == 'caro') {
-            $Query->where('price', '<=', 50);
-            $Query->where('price', '>', 25);
-        }
-
-        if ($value == 'carito') {
-            $Query->where('price', '>', 50);
+        switch ($value) {
+            case 'barato':
+                $Query->where('price', '<=', 15);
+                break;
+            case 'bueno':
+                $Query->where('price', '<=', 25);
+                $Query->where('price', '>', 15);
+                break;
+            case 'caro':
+                $Query->where('price', '<=', 50);
+                $Query->where('price', '>', 25);
+                break;
+            case 'carito':
+                $Query->where('price', '>', 50);
+                break;
+            default:
+                if (strpos($value, ',') != false) {
+                    $rangeString = Str::of($value)->explode(',');
+                    $rangeInt = [];
+                    foreach ($rangeString as $value) {
+                        $rangeInt[] = (int) $value;
+                    }
+                    if ($rangeInt[0] > $rangeInt[1]) {
+                        $Query->where('price', '<=', $rangeInt[0]);
+                        $Query->where('price', '>', $rangeInt[1]);
+                    } else {
+                        $Query->where('price', '<=', $rangeInt[1]);
+                        $Query->where('price', '>', $rangeInt[0]);
+                    }
+                } else {
+                    abort(400);
+                }
         }
     }
 

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\Product;
 use App\Models\Category;
-use App\Models\Variation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TypeCollection;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\ProductCollection;
+use App\Http\Resources\CategoryCollection;
 
 class CategoryController extends Controller
 {
@@ -20,7 +17,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return CategoryCollection::make(
+            Category::orderBy('name')->get()
+        );
     }
 
     /**

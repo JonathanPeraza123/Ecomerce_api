@@ -21,7 +21,7 @@ class BrandController extends Controller
     public function index()
     {
         return BrandCollection::make(
-            Brand::orderBy('name')->get()
+            Brand::applyFilters()->orderBy('name')->get()
         );
     }
 
@@ -44,10 +44,6 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        // $products = Variation::allProducts($brand)->paginate();
-        // dd($products);
-        // $products = $brand->products;
-        // return $products;
         return ProductCollection::make(Variation::allProducts($brand)->paginate());
     }
 

@@ -14,102 +14,90 @@ class FilterProductsTest extends TestCase
     /** @test */
     public function can_filter_products_by_price_range_barato()
     {
-        Variation::factory()->create(['price' => 5]);
-        Variation::factory()->create(['price' => 15]);
-        Variation::factory()->create(['price' => 20]);
+        $products1 = Variation::factory()->create(['price' => 5]);
+        $products2 = Variation::factory()->create(['price' => 15]);
+        $products3 = Variation::factory()->create(['price' => 20]);
 
         $url = route('p.index', ['filter[price]' => 'barato']);
 
         $response = $this->getJson($url);
 
         $response->assertJsonCount(2, 'data')
-            ->assertSee([
-                'price' => 5,
-                'price' => 15,
-            ])
-            ->assertDontSee([
-                'price' => 20,
-            ]);
+            ->assertSee($products1->name)
+            ->assertSee($products2->name)
+            ->assertDontSee($products3->name);
     }
 
     /** @test */
     public function can_filter_products_by_price_range_bueno()
     {
-        Variation::factory()->create(['price' => 16]);
-        Variation::factory()->create(['price' => 21]);
-        Variation::factory()->create(['price' => 26]);
+        $products1 = Variation::factory()->create(['price' => 16]);
+        $products2 = Variation::factory()->create(['price' => 21]);
+        $products3 = Variation::factory()->create(['price' => 26]);
 
         $url = route('p.index', ['filter[price]' => 'bueno']);
 
         $response = $this->getJson($url);
 
         $response->assertJsonCount(2, 'data')
-            ->assertSee([
-                'price' => 16,
-                'price' => 21,
-            ])
-            ->assertDontSee([
-                'price' => 26,
-            ]);
+            ->assertSee($products1->name)
+            ->assertSee($products2->name)
+            ->assertDontSee($products3->name);
     }
 
     /** @test */
     public function can_filter_products_by_price_range_caro()
     {
-        Variation::factory()->create(['price' => 40]);
-        Variation::factory()->create(['price' => 35]);
-        Variation::factory()->create(['price' => 51]);
+        $products1 = Variation::factory()->create(['price' => 40]);
+        $products2 = Variation::factory()->create(['price' => 35]);
+        $products3 = Variation::factory()->create(['price' => 51]);
 
         $url = route('p.index', ['filter[price]' => 'caro']);
 
         $response = $this->getJson($url);
 
         $response->assertJsonCount(2, 'data')
-            ->assertSee([
-                'price' => 40,
-                'price' => 35,
-            ])
-            ->assertDontSee([
-                'price' => 51,
-            ]);
+            ->assertSee($products1->name)
+            ->assertSee($products2->name)
+            ->assertDontSee($products3->name);
     }
 
     /** @test */
     public function can_filter_products_by_price_range_carito()
     {
-        Variation::factory()->create(['price' => 100]);
-        Variation::factory()->create(['price' => 75]);
-        Variation::factory()->create(['price' => 15]);
+        $products1 = Variation::factory()->create(['price' => 100]);
+        $products2 = Variation::factory()->create(['price' => 75]);
+        $products3 = Variation::factory()->create(['price' => 9]);
 
         $url = route('p.index', ['filter[price]' => 'carito']);
 
         $response = $this->getJson($url);
 
         $response->assertJsonCount(2, 'data')
-            ->assertSee([
-                'price' => 100,
-                'price' => 75,
-            ]);
+            ->assertSee($products1->name)
+            ->assertSee($products2->name)
+            ->assertDontSee($products3->name);
     }
 
     /** @test */
     public function can_filter_products_by_price_range_ramdon()
     {
-        Variation::factory()->create(['price' => 10]);
-        Variation::factory()->create(['price' => 40]);
-        Variation::factory()->create(['price' => 64]);
-        Variation::factory()->create(['price' => 78]);
-        Variation::factory()->create(['price' => 81]);
+        $products1 = Variation::factory()->create(['price' => 9]);
+        $products2 = Variation::factory()->create(['price' => 40]);
+        $products3 = Variation::factory()->create(['price' => 64]);
+        $products4 = Variation::factory()->create(['price' => 78]);
+        $products5 = Variation::factory()->create(['price' => 81]);
 
         $url = route('p.index', ['filter[price]' => '60,80']);
 
         $response = $this->getJson($url);
 
         $response->assertJsonCount(2, 'data')
-            ->assertSee([
-                'price' => 64,
-                'price' => 78,
-            ]);
+            ->assertSee($products3->name)
+            ->assertSee($products4->name)
+            ->assertDontSee($products5->name)
+            ->assertDontSee($products1->name)
+            ->assertDontSee($products2->name);
     }
 
     /** @test */

@@ -12,7 +12,7 @@ class PaginateProductsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function can_fetch_paginated_articles()
+    public function can_fetch_paginated_products()
     {
         $products = Variation::factory()->count(20)->create();
 

@@ -14,6 +14,16 @@ class Variation extends Model
 {
     use HasFactory, HasSort;
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'price',
+        'quantity',
+        'description',
+        'in_stock',
+        'product_id'
+    ];
+
     public $allowedSorts = ['name', 'price'];
 
     public function getRouteKeyName()

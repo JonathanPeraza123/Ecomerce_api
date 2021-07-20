@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Rules\Slug;
+use App\Models\Type;
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Variation;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
@@ -29,7 +34,36 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'brand' => ['required', 'exists:brands,name'],
+            'type' => ['required', 'exists:types,name'],
+            'name' => ['required'],
+            'slug' => ['required', 'alpha_dash', new Slug],
+            'description' => ['required'],
+            'price' => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric'],
+            'in_stock' => ['required'],
+        ]);
+
+        $brand = Brand::where('name', $request->brand)->first();
+        $type = Type::where('name', $request->type)->first();
+
+        $product = Product::create([
+            'brand_id' => $brand->id,
+            'type_id' => $type->id
+        ]);
+
+        $variation = Variation::create([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'in_stock' => $request->in_stock,
+            'product_id' => $product->id
+        ]);
+
+        return ProductResource::make($variation);
     }
 
     /**

@@ -14,6 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Variation::factory(10)->create();
+        Variation::factory(20)->create();
     }
 }

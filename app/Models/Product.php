@@ -9,6 +9,11 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'type_id',
+        'brand_id'
+    ];
+
     public function variations()
     {
         return $this->hasMany(Variation::class);

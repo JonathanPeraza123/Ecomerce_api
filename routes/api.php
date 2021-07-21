@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('p', ProductController::class);
-// Route::get('p', [ProductController::class, 'index'])->name('p.index');
-// Route::get('p/{p}', [ProductController::class, 'show'])->name('p.show');
-// Route::post('p', [ProductController::class, 'store'])->name('p.store');
+
+Route::post('variation/{product}', [ProductController::class, 'storeVariation'])
+    ->name('api.v1.storeVariation.product');
 
 Route::apiResource('categories', CategoryController::class);
 

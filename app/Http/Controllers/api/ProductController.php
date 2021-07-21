@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductCollection;
+use PhpParser\Node\Expr\Variable;
 
 class ProductController extends Controller
 {
@@ -63,6 +64,29 @@ class ProductController extends Controller
             'product_id' => $product->id
         ]);
 
+        return ProductResource::make($variation);
+    }
+
+    public function storeVariation(Product $product, Request $request)
+    {
+        $request->validate([
+            'name' => ['required'],
+            'slug' => ['required', 'alpha_dash', new Slug],
+            'price' => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric'],
+            'description' => ['required'],
+
+        ]);
+        $variation = Variation::create([
+            'name' => $request->name,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'in_stock' => $request->in_stock,
+            'product_id' => $product->id
+        ]);
         return ProductResource::make($variation);
     }
 

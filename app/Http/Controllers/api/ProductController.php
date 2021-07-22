@@ -79,7 +79,6 @@ class ProductController extends Controller
         ]);
         $variation = Variation::create([
             'name' => $request->name,
-            'name' => $request->name,
             'slug' => $request->slug,
             'price' => $request->price,
             'quantity' => $request->quantity,
@@ -110,9 +109,15 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Variation $p)
     {
-        //
+        $request->validate([
+            'slug' => ['alpha_dash', new Slug],
+            'price' => ['numeric'],
+            'quantity' => ['numeric'],
+        ]);
+        $p->update($request->all());
+        return ProductResource::make($p);
     }
 
     /**
@@ -121,8 +126,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Variation $p)
     {
-        //
+        $variations = $p->product->variations;
+        $product = $p->product;
+        if (sizeof($variations) !== 1) {
+            $p->delete();
+            $reponse = ProductResource::make($p);
+            return response($reponse, 204);
+        }
+        $p->delete();
+        $product->delete();
+        $reponse = ProductResource::make($p);
+        return response($reponse, 204);
     }
 }

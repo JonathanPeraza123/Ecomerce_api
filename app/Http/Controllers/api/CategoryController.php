@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Rules\Slug;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TypeCollection;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryCollection;
 
 class CategoryController extends Controller
@@ -30,7 +32,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+            'slug' => ['required', 'alpha_dash', new Slug],
+        ]);
+        $category = Category::create([
+            'name' => $request->name,
+            'slug' => $request->slug,
+        ]);
+
+        return CategoryResource::make($category);
     }
 
     /**
@@ -52,9 +63,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'slug' => ['alpha_dash', new Slug],
+        ]);
+
+        $category->update($request->all());
+
+        return CategoryResource::make($category);
     }
 
     /**
@@ -63,8 +80,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        $reponse = CategoryResource::make($category);
+        return response($reponse, 204);
     }
 }

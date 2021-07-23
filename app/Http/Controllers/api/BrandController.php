@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Rules\Slug;
 use App\Models\Brand;
+use App\Models\Product;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductCollection;
-use App\Models\Product;
+use App\Models\Category;
 
 class BrandController extends Controller
 {
@@ -33,7 +35,15 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+            'slug' => ['required', 'alpha_dash', new Slug],
+        ]);
+        $brand = Brand::create([
+            'name' => $request->name,
+            'slug' => $request->slug,
+        ]);
+        return BrandResource::make($brand);
     }
 
     /**
@@ -54,9 +64,13 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Brand $brand)
     {
-        //
+        $request->validate([
+            'slug' => ['alpha_dash', new Slug],
+        ]);
+        $brand->update($request->all());
+        return BrandResource::make($brand);
     }
 
     /**
@@ -65,8 +79,12 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Brand $brand)
     {
-        //
+        $brand->delete();
+
+        $response = BrandResource::make($brand);
+
+        return response($response, 204);
     }
 }
